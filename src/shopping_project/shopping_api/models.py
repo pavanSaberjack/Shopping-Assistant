@@ -63,14 +63,26 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
         return self.email
 
-# class ProfileFeedItem(models.Model):
-#     """Profile status update"""
-#
-#     user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
-#     status_text = models.CharField(max_length=255)
-#     created_on = models.DateTimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         """Return as string"""
-#
-#         return self.status_text
+class ProfileFeedItem(models.Model):
+    """Profile status update"""
+
+    user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    status_text = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """Return as string"""
+
+        return self.status_text
+
+class ShoppingItem(models.Model):
+    """Shopping item obbject"""
+
+    user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    item_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """Return as string"""
+
+        return self.item_name
