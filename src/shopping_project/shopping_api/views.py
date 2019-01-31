@@ -36,29 +36,41 @@ class LoginViewSet(viewsets.ViewSet):
         return ObtainAuthToken().post(request)
 
 
-class UserProfileFeedViewSet(viewsets.ModelViewSet):
-    """Handles creating , reading and updating feed items"""
-
-    authentication_classes = (TokenAuthentication,)
-    serializer_class = serializers.ProfileFeedItemSerializer
-    queryset = models.ProfileFeedItem.objects.all()
-    permission_classes = (permissions.PostOwnStatus, IsAuthenticated)
-
-    def perform_create(self, serializer):
-        """Sets the user profile to the logged in user."""
-
-        serializer.save(user_profile=self.request.user)
-
-
 class ShoppingItemViewSet(viewsets.ModelViewSet):
     """Handles creating shopping item and adding it to user list"""
 
-    authentication_classes = (TokenAuthentication,)
+    # authentication_classes = (TokenAuthentication,)
     serializer_class = serializers.ShoppingItemSerializer
     queryset = models.ShoppingItem.objects.all()
-    permission_classes = (permissions.PostOwnStatus, IsAuthenticated)
+    # permission_classes = (permissions.PostOwnStatus, IsAuthenticated)
 
     def perform_create(self, serializer):
         """Sets the user profile to the logged in user."""
 
-        serializer.save(user_profile=self.request.user)
+        serializer.save()
+
+
+class ShoppingListItemViewSet(viewsets.ModelViewSet):
+    """Handles creating shopping item and adding it to user list"""
+
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ShoppingListItemSerializer
+    queryset = models.ShoppingListItem.objects.all()
+    permission_classes = (permissions.AddToYourList, IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        """Sets the user profile to the logged in user."""
+
+        item_id = self.request.data.get("item_id", 0)
+
+        print("Its hereeeeeee 2222222")
+
+        item = models.ShoppingItem.objects.filter(id=item_id).first()
+
+        print("Its hereeeeeee 333333")
+
+        print(item)
+
+        # user = models.UserProfile.objects.filter(id=1)[0]
+
+        serializer.save(user_profile=self.request.user, shopping_item=item)
