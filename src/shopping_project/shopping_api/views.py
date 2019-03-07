@@ -71,11 +71,6 @@ class ShoppingListItemViewSet(viewsets.ModelViewSet):
         results = serializers.ShoppingItemSerializer(item_list, many=True).data
         return Response(results)
 
-
-        # queryset = models.ShoppingListItem.objects.filter(user_profile=self.request.user.id)
-        #
-        # return Response({ 'result': serializers.ResponseShoppingListItemSerializer(queryset, many=True).data })
-
     def perform_create(self, serializer):
         """Sets the user profile to the logged in user."""
         item_id = self.request.data.get("shopping_item", 0)

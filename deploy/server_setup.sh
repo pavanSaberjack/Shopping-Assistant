@@ -3,11 +3,12 @@
 set -e
 
 # TODO: Set to URL of git repo.
-PROJECT_GIT_URL='https://github.com/pavanSaberjack/Shopping-Assistant/tree/dev'
+
+PROJECT_GIT_URL='https://github.com/pavanSaberjack/Shopping-Assistant.git'
 
 PROJECT_BASE_PATH='/usr/local/apps'
 VIRTUALENV_BASE_PATH='/usr/local/virtualenvs'
-
+gi
 # Set Ubuntu Language
 locale-gen en_GB.UTF-8
 
