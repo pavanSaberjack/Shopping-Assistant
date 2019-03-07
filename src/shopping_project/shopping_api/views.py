@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
@@ -9,6 +9,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import GenericAPIView
 
 from . import serializers
 from . import models
@@ -49,7 +50,6 @@ class ShoppingItemViewSet(viewsets.ModelViewSet):
 
         serializer.save()
 
-
 class ShoppingListItemViewSet(viewsets.ModelViewSet):
     """Handles creating shopping item and adding it to user list"""
 
@@ -58,19 +58,33 @@ class ShoppingListItemViewSet(viewsets.ModelViewSet):
     queryset = models.ShoppingListItem.objects.all()
     permission_classes = (permissions.AddToYourList, IsAuthenticated,)
 
+    def list(self, serializer, *kwargs):
+
+        queryset = models.ShoppingListItem.objects.filter(user_profile=self.request.user.id)
+
+        item_list = []
+        for shoppingListItem in queryset:
+            item_id = shoppingListItem.shopping_item.id
+            item = models.ShoppingItem.objects.filter(id=item_id).first()
+            item_list.append(item)
+
+        results = serializers.ShoppingItemSerializer(item_list, many=True).data
+        return Response(results)
+
+
+        # queryset = models.ShoppingListItem.objects.filter(user_profile=self.request.user.id)
+        #
+        # return Response({ 'result': serializers.ResponseShoppingListItemSerializer(queryset, many=True).data })
+
     def perform_create(self, serializer):
         """Sets the user profile to the logged in user."""
-
-        item_id = self.request.data.get("item_id", 0)
-
-        print("Its hereeeeeee 2222222")
-
+        item_id = self.request.data.get("shopping_item", 0)
         item = models.ShoppingItem.objects.filter(id=item_id).first()
 
-        print("Its hereeeeeee 333333")
+        print(item_id)
 
-        print(item)
+        if not item:
+            raise ValueError('Invalid item id')
 
-        # user = models.UserProfile.objects.filter(id=1)[0]
-
+        # Found valid item
         serializer.save(user_profile=self.request.user, shopping_item=item)
