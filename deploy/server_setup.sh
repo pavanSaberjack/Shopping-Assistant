@@ -35,7 +35,7 @@ supervisorctl update
 supervisorctl restart shopping_api
 
 # Setup nginx to make our application accessible.
-cp $PROJECT_BASE_PATH/shopping_assistant/deploy/nginx_profiles_api.conf /etc/nginx/sites-available/shopping_api.conf
+cp $PROJECT_BASE_PATH/shopping_assistant/deploy/nginx_shopping_api.conf /etc/nginx/sites-available/shopping_api.conf
 rm /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/shopping_api.conf /etc/nginx/sites-enabled/shopping_api.conf
 systemctl restart nginx.service
