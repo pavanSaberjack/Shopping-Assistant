@@ -40,15 +40,15 @@ class ShoppingListItemSerializer(serializers.ModelSerializer):
         fields = ('id', 'user_profile', 'shopping_item')
         extra_kwargs = {'user_profile': {'read_only': True}}
 
-# class ResponseShoppingListItemSerializer(serializers.ModelSerializer):
-#     """Serializer for feed item"""
-#
-#     # item_id = serializers.IntegerField()
-#     # item_name = serializers.CharField()
-#
-#
-#     class Meta:
-#         """Your data serializer, define your fields here."""
-#
-#         model = models.ShoppingItem
-#         fields = ('shopping_item',)
+class ResponseShoppingListItemSerializer(serializers.ModelSerializer):
+    """Serializer for feed item"""
+
+    # item_id = serializers.IntegerField()
+    # item_name = serializers.CharField()
+
+
+    class Meta:
+        """Your data serializer, define your fields here."""
+
+        model = models.ShoppingItem
+        fields = ('shopping_item',)
